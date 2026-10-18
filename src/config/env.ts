@@ -10,7 +10,7 @@ const SECRET_MIN = 32;
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(3000),
-  CLIENT_ORIGIN: z.string().default('http://localhost:5173'),
+  CLIENT_ORIGIN: z.string().default('https://cms-manajemenen.vercel.app/'),
   PUBLIC_BASE_URL: z.string().default('http://localhost:3000'),
 
   JWT_ACCESS_SECRET: z.string().min(1).default('dev-access-secret-insecure-change-me-0000'),
