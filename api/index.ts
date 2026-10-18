@@ -1,5 +1,5 @@
-import { createApp } from './src/app';
-import { buildContainer } from './src/container';
+import { createApp } from '../src/app';
+import { buildContainer } from '../src/container';
 
 let app: ReturnType<typeof createApp> | null = null;
 
