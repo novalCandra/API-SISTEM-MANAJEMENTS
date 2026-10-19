@@ -1,9 +1,17 @@
-import pino from 'pino';
+
+import pino, { type LoggerOptions } from 'pino';
 import { config } from './env';
 
-export const logger = pino({
+const isProduction = process.env.NODE_ENV === 'production';
+
+const loggerOptions: LoggerOptions = {
   level: config.LOG_LEVEL,
-  base: { service: 'stokku-api', env: config.NODE_ENV },
+
+  base: {
+    service: 'stokku-api',
+    env: process.env.NODE_ENV ?? config.NODE_ENV,
+  },
+
   redact: {
     paths: [
       'req.headers.authorization',
@@ -20,12 +28,19 @@ export const logger = pino({
     ],
     censor: '[REDACTED]',
   },
-  transport: config.isProduction
-    ? undefined
-    : {
-        target: 'pino-pretty',
-        options: { colorize: true, translateTime: 'HH:MM:ss' },
-      },
-});
+};
+
+// Pretty logging is only enabled in development.
+if (!isProduction) {
+  loggerOptions.transport = {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      translateTime: 'HH:MM:ss',
+    },
+  };
+}
+
+export const logger = pino(loggerOptions);
 
 export type Logger = typeof logger;
